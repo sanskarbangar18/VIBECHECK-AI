@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>VibeCheck AI | Get Your Vibe Score</title>
+  <meta name="description" content="Find your vibe score in seconds. Savage roasts, future predictions, corporate career reads and red flag checks." />
+  <meta name="theme-color" content="#05060f" />
+
+  <!-- Google AdSense: paste your script here after approval (keep it in <head>)
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN). For maximum speed in production, compile Tailwind instead. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Orbitron', 'sans-serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            neon: { pink: '#ff2e88', cyan: '#00f0ff', lime: '#b6ff3b', violet: '#9d4bff' },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #05060f;
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(255, 46, 136, 0.18), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.14), transparent 45%),
+        radial-gradient(circle at 50% 100%, rgba(157, 75, 255, 0.16), transparent 50%);
+      background-attachment: fixed;
+      min-height: 100dvh;
+      color: #e6f1ff;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+    }
+    option { background: #0b0d1f; color: #fff; }
+
+    .glass {
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      border: 1px solid rgba(0, 240, 255, 0.18);
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.08), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .neon-text { text-shadow: 0 0 8px rgba(0,240,255,0.7), 0 0 22px rgba(0,240,255,0.35); }
+    .font-display { font-family: 'Orbitron', sans-serif; }
+
+    .field {
+      width: 100%;
+      background: rgba(5, 6, 15, 0.7);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .field::placeholder { color: rgba(255,255,255,0.35); }
+    .field:focus {
+      border-color: #00f0ff;
+      box-shadow: 0 0 0 3px rgba(0,240,255,0.15), 0 0 20px rgba(0,240,255,0.25);
+    }
+    .field-error { border-color: #ff2e88 !important; box-shadow: 0 0 16px rgba(255,46,136,0.35) !important; }
+    .label {
+      display: block; margin-bottom: 8px;
+      font-size: 12px; font-weight: 600; letter-spacing: .12em;
+      text-transform: uppercase; color: rgba(0,240,255,0.85);
+    }
+
+    .btn-neon {
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 16px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700; font-size: 14px; letter-spacing: .08em;
+      color: #05060f;
+      background: linear-gradient(90deg, #00f0ff, #9d4bff 50%, #ff2e88);
+      background-size: 200% 100%;
+      box-shadow: 0 0 24px rgba(0,240,255,0.35), 0 0 40px rgba(255,46,136,0.2);
+      transition: transform .15s ease, box-shadow .25s ease, background-position .6s ease;
+    }
+    .btn-neon:hover { background-position: 100% 0; box-shadow: 0 0 34px rgba(0,240,255,0.55), 0 0 60px rgba(255,46,136,0.35); }
+    .btn-neon:active { transform: scale(.97); }
+    .btn-neon:disabled { opacity: .6; cursor: not-allowed; }
+    .btn-ghost {
+      width: 100%;
+      padding: 14px 12px;
+      border-radius: 14px;
+      font-weight: 600; font-size: 14px;
+      color: #e6f1ff;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(0,240,255,0.3);
+      transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .btn-ghost:hover { background: rgba(0,240,255,0.1); box-shadow: 0 0 18px rgba(0,240,255,0.25); }
+    .btn-ghost:active { transform: scale(.97); }
+    .btn-wa { border-color: rgba(182,255,59,0.45); }
+    .btn-wa:hover { background: rgba(182,255,59,0.1); box-shadow: 0 0 18px rgba(182,255,59,0.25); }
+    .btn-ig { border-color: rgba(255,46,136,0.45); }
+    .btn-ig:hover { background: rgba(255,46,136,0.1); box-shadow: 0 0 18px rgba(255,46,136,0.25); }
+
+    .ad-slot {
+      position: relative;
+      border: 1px dashed rgba(255,255,255,0.18);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.02);
+      padding: 22px 8px 8px;
+      text-align: center;
+    }
+    .ad-slot .ad-tag {
+      position: absolute; top: 6px; left: 10px;
+      font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .ad-placeholder {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; min-height: 60px;
+      border-radius: 10px;
+      background: repeating-linear-gradient(45deg, rgba(0,240,255,0.04) 0 10px, transparent 10px 20px);
+      color: rgba(255,255,255,0.45);
+      font-size: 12px; letter-spacing: .06em;
+    }
+    .ad-top .ad-placeholder { min-height: 90px; }
+    .ad-sticky {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+      padding: 6px 10px calc(6px + env(safe-area-inset-bottom, 0px));
+      background: rgba(5,6,15,0.85);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(0,240,255,0.2);
+    }
+    .ad-sticky .ad-placeholder { min-height: 50px; }
+
+    .scanner {
+      position: relative;
+      width: 170px; height: 170px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,240,255,0.25);
+      box-shadow: 0 0 40px rgba(0,240,255,0.25), inset 0 0 30px rgba(157,75,255,0.25);
+      overflow: hidden;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    .scanner::after {
+      content: "";
+      position: absolute; left: 0; right: 0; height: 3px; top: 0;
+      background: linear-gradient(90deg, transparent, #00f0ff, #ff2e88, transparent);
+      box-shadow: 0 0 18px #00f0ff;
+      animation: scan 1.4s linear infinite;
+    }
+    @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    .fade-in { animation: fadeIn .5s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+    #preview canvas { width: 100%; height: 100%; display: block; border-radius: 16px; }
+
+    .toast {
+      position: fixed; left: 50%; top: 18px; transform: translateX(-50%) translateY(-120%);
+      z-index: 60; max-width: 90vw;
+      padding: 12px 18px; border-radius: 12px;
+      background: rgba(11,13,31,0.95); border: 1px solid rgba(0,240,255,0.4);
+      box-shadow: 0 0 24px rgba(0,240,255,0.25);
+      font-size: 14px; color: #e6f1ff;
+      transition: transform .35s cubic-bezier(.2,.8,.2,1);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+
+<body class="pb-28">
+
+  <!-- TOP BANNER AD. ADSENSE: replace .ad-placeholder with your <ins class="adsbygoogle"> unit. -->
+  <div class="ad-slot ad-top mx-auto mt-3 w-full max-w-3xl px-3" id="ad-top" aria-label="Advertisement">
+    <span class="ad-tag">Advertisement</span>
+    <div class="ad-placeholder">Top Banner · 728×90 / Responsive</div>
+  </div>
+
+  <main class="mx-auto w-full max-w-md px-4 pb-6 pt-8 sm:max-w-lg">
+
+    <header class="mb-8 text-center">
+      <p class="mb-2 text-[11px] font-semibold uppercase tracking-[.35em] text-neon-violet">Powered by AI · 2026 Edition</p>
+      <h1 class="font-display text-4xl font-extrabold text-white sm:text-5xl">
+        <span class="neon-text text-neon-cyan">VIBE</span><span class="text-neon-pink" style="text-shadow:0 0 14px rgba(255,46,136,.7)">CHECK</span>
+        <span class="text-white/80 text-2xl sm:text-3xl">AI</span>
+      </h1>
+      <p class="mt-3 text-sm text-white/60">Drop your name. Get your vibe score. Share the damage.</p>
+    </header>
+
+    <form id="vibe-form" class="glass fade-in space-y-6 rounded-3xl p-5 sm:p-8" novalidate>
+      <div>
+        <label for="name" class="label">Name or handle</label>
+        <input id="name" name="name" type="text" maxlength="30" autocomplete="off"
+          autocapitalize="words" spellcheck="false" placeholder="@yourhandle"
+          class="field" aria-describedby="name-error" required />
+        <p id="name-error" class="mt-2 hidden text-xs font-medium text-neon-pink">Please enter at least 2 characters.</p>
+      </div>
+
+      <div>
+        <label for="mode" class="label">Vibe mode</label>
+        <div class="relative">
+          <select id="mode" name="mode" class="field pr-12 cursor-pointer">
+            <option value="roast">🔥 Savage Roast</option>
+            <option value="future">🔮 Future Prediction</option>
+            <option value="career">💼 Corporate Career</option>
+            <option value="redflags">🚩 Red Flags</option>
+          </select>
+          <span class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-neon-cyan" aria-hidden="true">▾</span>
+        </div>
+      </div>
+
+      <div>
+        <label for="trend" class="label flex items-center justify-between">
+          <span>Trend context</span>
+          <span class="flex items-center gap-1.5 text-[10px] tracking-widest text-neon-lime">
+            <span class="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-neon-lime"></span>LIVE
+          </span>
+        </label>
+        <div class="relative">
+          <select id="trend" name="trend" class="field pr-12 cursor-pointer"></select>
+          <span class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-neon-cyan" aria-hidden="true">▾</span>
+        </div>
+        <p class="mt-2 text-[11px] text-white/40">Trends are refreshed by the app so your roast stays on-trend.</p>
+      </div>
+
+      <button type="submit" id="go" class="btn-neon">⚡ RUN VIBECHECK</button>
+    </form>
+
+    <section id="result" class="mt-8 hidden space-y-6" aria-live="polite">
+      <div class="glass fade-in rounded-3xl p-4 sm:p-6">
+        <p id="result-text" class="mb-4 text-center text-sm text-white/70"></p>
+        <div id="preview" class="mx-auto aspect-[9/16] w-full max-w-[280px] overflow-hidden rounded-2xl shadow-[0_0_40px_rgba(255,46,136,0.25)]"></div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <button id="share-native" class="btn-neon col-span-2 text-xs sm:text-sm">📤 SHARE RESULT</button>
+        <button id="share-wa" class="btn-ghost btn-wa">💬 WhatsApp</button>
+        <button id="share-ig" class="btn-ghost btn-ig">📸 Insta Story</button>
+        <button id="download" class="btn-ghost col-span-2">⬇ Save 9:16 PNG</button>
+      </div>
+
+      <button id="again" class="w-full py-3 text-sm font-medium text-white/60 underline decoration-neon-cyan/40 underline-offset-4 hover:text-neon-cyan">
+        Run another check
+      </button>
+    </section>
+  </main>
+
+  <!-- INTERSTITIAL LOADER (4s scan + ad slot). ADSENSE: paste ad unit inside .ad-placeholder. -->
+  <div id="loader" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-[#05060f]/90 p-6 backdrop-blur-md" role="status" aria-live="polite">
+    <div class="scanner mb-8"></div>
+    <p class="font-display mb-1 text-xs tracking-[.3em] text-neon-violet">ANALYZING</p>
+    <p id="loader-msg" class="neon-text mb-6 h-6 text-center text-base font-semibold text-neon-cyan">Scanning vibe signature…</p>
+    <div class="mb-8 h-2 w-full max-w-sm overflow-hidden rounded-full bg-white/10">
+      <div id="progress" class="h-full w-0 rounded-full bg-gradient-to-r from-neon-cyan via-neon-violet to-neon-pink"></div>
+    </div>
+    <div id="ad-interstitial" class="ad-slot w-full max-w-sm" aria-label="Advertisement">
+      <span class="ad-tag">Advertisement</span>
+      <div class="ad-placeholder min-h-[250px]">Interstitial · 300×250 Rectangle</div>
+    </div>
+  </div>
+
+  <!-- STICKY BOTTOM ANCHOR AD. ADSENSE: paste anchor unit inside .ad-placeholder. -->
+  <div id="ad-sticky" class="ad-sticky" aria-label="Advertisement">
+    <div class="mx-auto flex max-w-3xl items-center gap-2">
+      <div class="ad-placeholder flex-1 text-[11px]">Sticky Anchor · 320×50 Mobile</div>
+      <button id="close-sticky" class="px-2 py-1 text-lg leading-none text-white/50 hover:text-white" aria-label="Close ad">✕</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script>
+    const SCAN_MS = 4000;
+
+    /* Trend context: update this list from your backend or a feed */
+    const TRENDS = [
+      { value: 'main-character', label: 'Main Character Energy' },
+      { value: 'sigma', label: 'Sigma Grindset' },
+      { value: 'quiet-luxury', label: 'Quiet Luxury' },
+      { value: 'ai-everything', label: 'AI Everything' },
+      { value: 'chai-chill', label: 'Chai & Chill Era' },
+      { value: 'situationship', label: 'Situationship Szn' },
+      { value: 'hustle-culture', label: 'Hustle Culture 2.0' },
+    ];
+
+    /* Vibe modes: headlines and verdicts */
+    const MODES = {
+      roast: {
+        label: 'Savage Roast', icon: '🔥', color: '#ff2e88',
+        headlines: [
+          (n) => `${n}, your vibe just filed for emotional bankruptcy.`,
+          (n) => `${n} entered the chat and immediately left the group.`,
+          (n) => `${n}, even your Wi-Fi has more personality than you.`,
+        ],
+        verdicts: [
+          (t) => `You're chasing "${t}" like it owes you rent. Touch grass, then touch up.`,
+          (t) => `Your "${t}" aura is 40% effort and 60% wishful thinking.`,
+          (t) => `Bold of you to bring "${t}" energy with a loading-screen personality.`,
+        ],
+      },
+      future: {
+        label: 'Future Prediction', icon: '🔮', color: '#9d4bff',
+        headlines: [
+          (n) => `${n}, the stars have already started writing your comeback arc.`,
+          (n) => `Oracle alert: ${n} is 6 months away from a major glow-up.`,
+          (n) => `${n}, the timeline shows a plot twist you won't see coming.`,
+        ],
+        verdicts: [
+          (t) => `Your "${t}" energy unlocks a big win before the year ends.`,
+          () => `Expect an unexpected DM that changes everything by next month.`,
+          () => `Trust the slow start. Your breakout moment is loading, not lost.`,
+        ],
+      },
+      career: {
+        label: 'Corporate Career', icon: '💼', color: '#00f0ff',
+        headlines: [
+          (n) => `${n}, your career profile reads like a future VP in the making.`,
+          (n) => `Performance review: ${n} exceeds expectations and attends every meeting.`,
+          (n) => `${n}, recruiters are already drafting your offer letter.`,
+        ],
+        verdicts: [
+          (t) => `Lead with "${t}" in your next 1:1 and you'll get the promotion narrative.`,
+          () => `Your strongest asset: turning chaos into a slide deck in 15 minutes.`,
+          () => `Next move: own one visible project and make your manager look good.`,
+        ],
+      },
+      redflags: {
+        label: 'Red Flags', icon: '🚩', color: '#b6ff3b',
+        headlines: [
+          (n) => `${n}, scanning for red flags… found a whole parade.`,
+          (n) => `${n} is giving "lovely at first, unpredictable later" energy.`,
+          (n) => `Caution: ${n} has three green flags and one suspicious umbrella.`,
+        ],
+        verdicts: [
+          (t) => `Your "${t}" habits are charming until they're not. Balance the vibe.`,
+          () => `Low risk, medium drama. Keep the good, screenshot the rest.`,
+          () => `Overall safe to hang out with, but keep your receipts and your boundaries.`,
+        ],
+      },
+    };
+
+    /* Utilities */
+    const $ = (id) => document.getElementById(id);
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const escapeText = (s) => String(s).replace(/[<>&"']/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&#39;' }[c]));
+    const safeFileName = (s) => s.replace(/[^\w-]+/g, '_');
+
+    function toast(msg, ms = 2600) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => t.classList.remove('show'), ms);
+    }
+
+    function scoreLabel(score) {
+      if (score >= 85) return 'MAIN CHARACTER';
+      if (score >= 65) return 'SOLID VIBES';
+      if (score >= 45) return 'MILD CHAOS';
+      return 'VIBE EMERGENCY';
+    }
+
+    /* Result generator: swap for an AI API call later if desired */
+    function generateVibe(name, modeKey, trend) {
+      const mode = MODES[modeKey];
+      const score = 35 + Math.floor(Math.random() * 65);
+      return {
+        name, mode, modeKey, score,
+        label: scoreLabel(score),
+        trend: trend.label,
+        headline: pick(mode.headlines)(name),
+        verdict: pick(mode.verdicts)(trend.label),
+      };
+    }
+
+    function populateTrends() {
+      $('trend').innerHTML = TRENDS.map((t) => `<option value="${t.value}">${escapeText(t.label)}</option>`).join('');
+    }
+
+    /* 9:16 card renderer (Canvas, 1080x1920) */
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function glow(ctx, x, y, radius, color) {
+      const g = ctx.createRadialGradient(x, y, 0, x, y, radius);
+      g.addColorStop(0, color);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+    }
+
+    function fitFontSize(ctx, text, maxW, startSize, weight, family) {
+      let size = startSize;
+      while (size > 40) {
+        ctx.font = `${weight} ${size}px ${family}`;
+        if (ctx.measureText(text).width <= maxW) break;
+        size -= 4;
+      }
+      return size;
+    }
+
+    function drawWrapped(ctx, text, cx, y, maxW, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      for (const w of words) {
+        const test = line ? `${line} ${w}` : w;
+        if (ctx.measureText(test).width > maxW && line) {
+          ctx.fillText(line, cx, y);
+          line = w;
+          y += lineHeight;
+        } else {
+          line = test;
+        }
+      }
+      if (line) ctx.fillText(line, cx, y);
+      return y + lineHeight;
+    }
+
+    async function buildCard(r) {
+      try {
+        await Promise.all([
+          document.fonts.load('800 60px Orbitron'),
+          document.fonts.load('600 40px Inter'),
+          document.fonts.load('400 40px Inter'),
+        ]);
+      } catch (_) { /* fallback fonts still render */ }
+
+      const W = 1080, H = 1920;
+      const canvas = document.createElement('canvas');
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d');
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+
+      const bg = ctx.createLinearGradient(0, 0, W, H);
+      bg.addColorStop(0, '#0a0320');
+      bg.addColorStop(0.55, '#06141f');
+      bg.addColorStop(1, '#1c0420');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+      glow(ctx, 150, 320, 460, 'rgba(255,46,136,0.35)');
+      glow(ctx, 950, 1500, 560, 'rgba(0,240,255,0.28)');
+
+      ctx.strokeStyle = 'rgba(0,240,255,0.06)';
+      ctx.lineWidth = 2;
+      for (let x = 0; x < W; x += 80) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let y = 0; y < H; y += 80) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = r.mode.color;
+      ctx.shadowColor = r.mode.color;
+      ctx.shadowBlur = 30;
+      roundRect(ctx, 40, 40, W - 80, H - 80, 56);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = '#00f0ff';
+      ctx.font = '700 56px Orbitron, sans-serif';
+      ctx.fillText('VIBECHECK AI', W / 2, 170);
+
+      ctx.font = '600 40px Inter, sans-serif';
+      ctx.fillStyle = r.mode.color;
+      ctx.fillText(`${r.mode.icon}  ${r.mode.label.toUpperCase()}`, W / 2, 270);
+
+      ctx.fillStyle = '#ffffff';
+      const nameSize = fitFontSize(ctx, r.name, W - 160, 120, 800, 'Orbitron, sans-serif');
+      ctx.font = `800 ${nameSize}px Orbitron, sans-serif`;
+      ctx.fillText(r.name, W / 2, 520);
+
+      const cx = W / 2, cy = 800, R = 230;
+      ctx.lineWidth = 26;
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+
+      const ringGrad = ctx.createLinearGradient(cx - R, cy, cx + R, cy);
+      ringGrad.addColorStop(0, '#00f0ff');
+      ringGrad.addColorStop(1, r.mode.color);
+      ctx.strokeStyle = ringGrad;
+      ctx.lineCap = 'round';
+      ctx.shadowColor = r.mode.color;
+      ctx.shadowBlur = 24;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * r.score) / 100);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      ctx.lineCap = 'butt';
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 150px Orbitron, sans-serif';
+      ctx.fillText(String(r.score), cx, cy + 40);
+      ctx.font = '500 36px Inter, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.fillText('/ 100 VIBE SCORE', cx, cy + 105);
+
+      ctx.font = '700 46px Orbitron, sans-serif';
+      ctx.fillStyle = r.mode.color;
+      ctx.fillText(r.label, W / 2, 1140);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 62px Inter, sans-serif';
+      let y = drawWrapped(ctx, r.headline, W / 2, 1250, 880, 80);
+
+      ctx.fillStyle = '#c9d6e3';
+      ctx.font = '400 44px Inter, sans-serif';
+      y = drawWrapped(ctx, r.verdict, W / 2, y + 40, 860, 62);
+
+      const tagText = `TREND · ${r.trend.toUpperCase()}`;
+      ctx.font = '600 34px Inter, sans-serif';
+      const tagW = ctx.measureText(tagText).width + 60;
+      ctx.fillStyle = 'rgba(0,240,255,0.1)';
+      roundRect(ctx, W / 2 - tagW / 2, 1640, tagW, 80, 40);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,240,255,0.5)';
+      ctx.lineWidth = 2;
+      roundRect(ctx, W / 2 - tagW / 2, 1640, tagW, 80, 40);
+      ctx.stroke();
+      ctx.fillStyle = '#00f0ff';
+      ctx.fillText(tagText, W / 2, 1692);
+
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.font = '500 32px Inter, sans-serif';
+      ctx.fillText('Get your own vibe score · VibeCheck AI', W / 2, 1830);
+
+      return canvas;
+    }
+
+    const canvasToBlob = (canvas) => new Promise((res) => canvas.toBlob(res, 'image/png'));
+
+    /* Sharing */
+    let current = null;
+    let currentCanvas = null;
+    let busy = false;
+
+    function shareText(r) {
+      return `${r.name} just got a VibeCheck: ${r.score}/100 (${r.label}) 😈 "${r.headline}" Try yours at VibeCheck AI.`;
+    }
+
+    async function getShareFile() {
+      const blob = await canvasToBlob(currentCanvas);
+      return new File([blob], `vibecheck-${safeFileName(current.name)}.png`, { type: 'image/png' });
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        toast('Copied to clipboard ✨');
+      } catch {
+        toast('Could not copy automatically.');
+      }
+    }
+
+    async function shareNative() {
+      if (!current) return;
+      const text = shareText(current);
+      try {
+        const file = await getShareFile();
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'VibeCheck AI', text });
+        } else if (navigator.share) {
+          await navigator.share({ title: 'VibeCheck AI', text, url: location.href });
+        } else {
+          await copyText(text);
+        }
+      } catch (err) {
+        if (err.name !== 'AbortError') toast('Sharing failed. Try Save PNG instead.');
+      }
+    }
+
+    function shareWhatsApp() {
+      if (!current) return;
+      const url = `https://wa.me/?text=${encodeURIComponent(shareText(current) + ' ' + location.href)}`;
+      window.open(url, '_blank', 'noopener');
+    }
+
+    async function downloadPNG(showToast = true) {
+      if (!currentCanvas) return;
+      const blob = await canvasToBlob(currentCanvas);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `vibecheck-${safeFileName(current.name)}-9x16.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+      if (showToast) toast('Image saved ⬇');
+    }
+
+    async function shareInstagram() {
+      await downloadPNG(false);
+      toast('Saved! Open Instagram → Your Story → add from gallery 📸', 4200);
+    }
+
+    /* Loader: 4s scan with interstitial ad */
+    const LOADER_MSGS = [
+      'Scanning vibe signature…',
+      'Cross-checking trend data…',
+      'Calibrating roast levels…',
+      'Consulting the timeline…',
+      'Generating your verdict…',
+    ];
+
+    function runLoader() {
+      return new Promise((resolve) => {
+        const loader = $('loader');
+        const msg = $('loader-msg');
+        const bar = $('progress');
+        loader.classList.remove('hidden');
+        loader.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+
+        bar.style.transition = 'none';
+        bar.style.width = '0%';
+        void bar.offsetWidth;
+        bar.style.transition = `width ${SCAN_MS}ms linear`;
+        bar.style.width = '100%';
+
+        let i = 0;
+        msg.textContent = LOADER_MSGS[0];
+        const tick = setInterval(() => {
+          i = (i + 1) % LOADER_MSGS.length;
+          msg.textContent = LOADER_MSGS[i];
+        }, SCAN_MS / LOADER_MSGS.length);
+
+        setTimeout(() => {
+          clearInterval(tick);
+          loader.classList.add('hidden');
+          loader.classList.remove('flex');
+          document.body.style.overflow = '';
+          resolve();
+        }, SCAN_MS);
+      });
+    }
+
+    async function renderResult(r) {
+      current = r;
+      currentCanvas = await buildCard(r);
+      $('preview').replaceChildren(currentCanvas);
+      $('result-text').textContent = `${r.name} · ${r.score}/100 · ${r.label}`;
+      const section = $('result');
+      section.classList.remove('hidden');
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* Events */
+    $('vibe-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (busy) return;
+
+      const input = $('name');
+      const name = input.value.trim().replace(/\s+/g, ' ');
+      if (name.length < 2) {
+        $('name-error').classList.remove('hidden');
+        input.classList.add('field-error');
+        input.focus();
+        return;
+      }
+      $('name-error').classList.add('hidden');
+      input.classList.remove('field-error');
+
+      busy = true;
+      $('go').disabled = true;
+      $('go').textContent = 'SCANNING…';
+
+      try {
+        const trend = TRENDS.find((t) => t.value === $('trend').value) || TRENDS[0];
+        const result = generateVibe(name, $('mode').value, trend);
+        await runLoader();
+        await renderResult(result);
+      } catch (err) {
+        console.error('VibeCheck error:', err);
+        toast('Something glitched. Please try again.');
+      } finally {
+        busy = false;
+        $('go').disabled = false;
+        $('go').textContent = '⚡ RUN VIBECHECK';
+      }
+    });
+
+    $('share-native').addEventListener('click', shareNative);
+    $('share-wa').addEventListener('click', shareWhatsApp);
+    $('share-ig').addEventListener('click', shareInstagram);
+    $('download').addEventListener('click', () => downloadPNG(true));
+
+    $('again').addEventListener('click', () => {
+      $('result').classList.add('hidden');
+      $('name').value = '';
+      $('name').focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    $('close-sticky').addEventListener('click', () => {
+      $('ad-sticky').remove();
+      document.body.classList.remove('pb-28');
+    });
+
+    populateTrends();
+  </script>
+</body>
+</html>
